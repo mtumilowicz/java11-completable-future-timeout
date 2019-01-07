@@ -13,14 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Created by mtumilowicz on 2019-01-07.
  */
 public class CompletableFutureTests {
-
-    @Test
-    public void get_withoutTimeoutException() throws InterruptedException, ExecutionException, TimeoutException {
-        var future = CompletableFuture.supplyAsync(() -> "future");
-
-        assertThat(future.get(500, TimeUnit.MILLISECONDS), is("future"));
-    }
-
+    
     @Test(expected = TimeoutException.class)
     public void get_withTimeoutException() throws InterruptedException, ExecutionException, TimeoutException {
         var future = CompletableFuture.supplyAsync(() -> {
@@ -32,11 +25,10 @@ public class CompletableFutureTests {
     }
 
     @Test
-    public void orTimeout_withoutTimeoutException() {
-        var future = CompletableFuture.supplyAsync(() -> "future")
-                .orTimeout(300, TimeUnit.MILLISECONDS);
+    public void get_withoutTimeoutException() throws InterruptedException, ExecutionException, TimeoutException {
+        var future = CompletableFuture.supplyAsync(() -> "future");
 
-        assertThat(future.join(), is("future"));
+        assertThat(future.get(500, TimeUnit.MILLISECONDS), is("future"));
     }
 
     @Test
@@ -52,9 +44,9 @@ public class CompletableFutureTests {
     }
 
     @Test
-    public void completeOnTimeout_withoutTimeoutException() {
+    public void orTimeout_withoutTimeoutException() {
         var future = CompletableFuture.supplyAsync(() -> "future")
-                .completeOnTimeout("timeout", 300, TimeUnit.MILLISECONDS);
+                .orTimeout(300, TimeUnit.MILLISECONDS);
 
         assertThat(future.join(), is("future"));
     }
@@ -67,5 +59,13 @@ public class CompletableFutureTests {
         }).completeOnTimeout("timeout", 300, TimeUnit.MILLISECONDS);
 
         assertThat(future.join(), is("timeout"));
+    }
+
+    @Test
+    public void completeOnTimeout_withoutTimeoutException() {
+        var future = CompletableFuture.supplyAsync(() -> "future")
+                .completeOnTimeout("timeout", 300, TimeUnit.MILLISECONDS);
+
+        assertThat(future.join(), is("future"));
     }
 }
