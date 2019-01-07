@@ -4,17 +4,19 @@ _Reference_: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/u
 # preview
 We have three approaches to timeouts when using 
 `CompletableFuture`:
-* `public T get(long timeout, TimeUnit unit)` - 
+1. `public T get(long timeout, TimeUnit unit)` - 
 Waits if necessary for at most the given time for this 
 future to complete, and then returns its result, if available.
-* `CompletableFuture<T>	orTimeout​(long timeout, TimeUnit unit)` -
+1. `CompletableFuture<T>	orTimeout​(long timeout, TimeUnit unit)` -
 Exceptionally completes this `CompletableFuture` with a `TimeoutException` 
 if not otherwise completed before the given timeout.
-* `CompletableFuture<T> completeOnTimeout​(T value, long timeout, TimeUnit unit)` - 
+1. `CompletableFuture<T> completeOnTimeout​(T value, long timeout, TimeUnit unit)` - 
 Completes this `CompletableFuture` with the given value if not otherwise 
 completed before the given timeout.
 
 # tests
+**Note that 2. and 3. are better approaches because physically no exception is thrown**.
+
 * `get`
     ```
     @Test(expected = TimeoutException.class)
